@@ -246,6 +246,11 @@ class NestedResourcesTransformer(MutatingReducer):
                         file_instance = file_type(
                             original=self.database.current.original
                         )
+
+                        pack = self.get_associated_pack(file_type)
+
+                        file_instance.bind(pack, full_name)
+
                         target = cast(  # pyright: ignore[reportInvalidCast]
                             JsonFileBase[Any],
                             self.generate(full_name, default=file_instance),
@@ -307,6 +312,10 @@ class NestedResourcesTransformer(MutatingReducer):
                         original=self.database.current.original,
                     )
 
+                    pack = self.get_associated_pack(file_type)
+
+                    file_instance.bind(pack, full_name)
+
                     if command.identifier.startswith("merge:"):
                         self.generate(full_name, merge=file_instance)
                         changed = True
@@ -337,6 +346,13 @@ class NestedResourcesTransformer(MutatingReducer):
             return replace(node, commands=AstChildren(commands))
 
         return node
+
+    def get_associated_pack(self, file_type):
+        return (
+                            self.generate.data
+                            if file_type in self.generate.data.resolve_scope_map().values()
+                            else self.generate.assets
+                        )
 
     @rule(AstCommand, identifier="execute:run:subcommand")
     def execute_nested_resource(self, node: AstCommand):

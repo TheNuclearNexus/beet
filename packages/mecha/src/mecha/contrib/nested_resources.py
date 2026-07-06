@@ -242,14 +242,14 @@ class NestedResourcesTransformer(MutatingReducer):
                             content_type = AstJsonContent
 
                         root = content_type.create_root_node(content)
+                        content = content.evaluate()
 
                         file_instance = file_type(
+                            content,
                             original=self.database.current.original
                         )
-
+                        
                         pack = self.get_associated_pack(file_type)
-
-                        file_instance.bind(pack, full_name)
 
                         target = cast(  # pyright: ignore[reportInvalidCast]
                             JsonFileBase[Any],
@@ -269,12 +269,7 @@ class NestedResourcesTransformer(MutatingReducer):
                                 ),
                                 resource_location=full_name,
                                 no_index=True,
-                                pack=(
-                                    self.generate.data
-                                    if file_type
-                                    in self.generate.data.resolve_scope_map().values()
-                                    else self.generate.assets
-                                ),
+                                pack=self.get_associated_pack(file_type)
                             )
                             self.database[target] = compilation_unit
                             self.database.enqueue(target, self.database.step + 1)
@@ -311,10 +306,6 @@ class NestedResourcesTransformer(MutatingReducer):
                         ),
                         original=self.database.current.original,
                     )
-
-                    pack = self.get_associated_pack(file_type)
-
-                    file_instance.bind(pack, full_name)
 
                     if command.identifier.startswith("merge:"):
                         self.generate(full_name, merge=file_instance)

@@ -613,8 +613,12 @@ class DataModelBase(TextFileBase[ValueType]):
 
     @classmethod
     def default(cls) -> ValueType:
-        return cls.model() if cls.model and issubclass(cls.model, BaseModel) else {}  # pyright: ignore[reportReturnType]
-
+        if cls.model and issubclass(cls.model, BaseModel):
+            try:
+                return cls.model() # pyright: ignore[reportReturnType]
+            except ValidationError:
+                return {} # pyright: ignore[reportReturnType]
+        return {} # pyright: ignore[reportReturnType]
 
 class JsonFileBase(DataModelBase[ValueType]):
     """Base class for json files."""

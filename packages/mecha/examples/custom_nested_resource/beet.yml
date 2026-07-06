@@ -1,0 +1,8 @@
+require:
+  - plugin
+  - mecha.contrib.nesting
+  - mecha.contrib.nested_resources
+data_pack:
+  load: [src]
+pipeline:
+  - mecha

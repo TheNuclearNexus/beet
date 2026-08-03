@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v0.104.1 (2026-07-08)
+
+### Bug Fixes
+
+- Text components became SNBT in 1.21.5, not 1.21 ([#505](https://github.com/mcbeet/beet/pull/505),
+  [`b56f104`](https://github.com/mcbeet/beet/commit/b56f1042762c624d66b8d2369da8b1046cdda507))
+
+
+## v0.104.0 (2026-06-26)
+
+### Features
+
+- Update to 26.2 ([#511](https://github.com/mcbeet/beet/pull/511),
+  [`593cae3`](https://github.com/mcbeet/beet/commit/593cae3300d8a3620b0e43e8fecb1d2f244bc4a7))
+
+
 ## v0.103.0 (2026-03-27)
 
 ### Features
